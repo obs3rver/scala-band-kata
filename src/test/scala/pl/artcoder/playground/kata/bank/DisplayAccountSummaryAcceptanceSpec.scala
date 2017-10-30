@@ -17,8 +17,6 @@ class DisplayAccountSummaryAcceptanceSpec extends FlatSpec with MockFactory with
   val transactionRepository = TransactionRepositoryImpl()
   val account = Account(statementPrinter, transactionRepository, clock)
 
-  behavior of "Account"
-
   it should "allow to display summary of transaction history" in {
     //given
     (clock.now _).when().returns(parseDateTimeStr("10/10/2017")).noMoreThanOnce()

@@ -1,10 +1,12 @@
 package pl.artcoder.playground.kata.bank.account
 
+import java.time.LocalDate
+
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 import pl.artcoder.playground.kata.bank.money.Money
 import pl.artcoder.playground.kata.bank.printer.StatementPrinter
-import pl.artcoder.playground.kata.bank.transaction.TransactionType.{Deposit, Withdrawal}
+import pl.artcoder.playground.kata.bank.transaction.TransactionType.{All, Deposit, Withdrawal}
 import pl.artcoder.playground.kata.bank.transaction.{Transaction, TransactionRepository, TransactionType}
 import pl.artcoder.playground.kata.bank.util.CurrentClock
 
@@ -53,7 +55,21 @@ class AccountSpec extends FlatSpec with MockFactory with Matchers {
     (statementPrinter.printStatement _).expects(List(deposit)).once()
 
     //when
-    account.printStatement(filter = TransactionType.Deposit)
+    account.printStatement(transactionTypeFilter = TransactionType.Deposit)
+  }
+
+  it should "print account statement summary with one withdrawal transaction filtered by timestamp" in {
+    //given
+    val withdrawalTimestamp = LocalDate.of(2017, 10, 10)
+    val timestampFilter = TransactionTimestampFilter(LocalDate.of(2017, 10, 5))
+    val withdrawal = Transaction(withdrawalTimestamp, AMOUNT, Withdrawal)
+
+    //expect
+    (transactionRepository.findByTransactionTypeAndTimestampFilter _).expects(All, timestampFilter).returning(List(withdrawal)).once()
+    (statementPrinter.printStatement _).expects(List(withdrawal)).once()
+
+    //when
+    account.printStatement(transactionTimestampFilter = timestampFilter)
   }
 
 
