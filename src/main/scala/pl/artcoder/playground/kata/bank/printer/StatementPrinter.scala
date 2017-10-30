@@ -16,13 +16,13 @@ class StatementPrinterImpl(val printer: Printer) extends StatementPrinter {
   private def zeroBalance: Money = Money.zero
 
   private def transactionToStatementLine(transaction: Transaction): Line = {
-    balance = balance + transaction.amount
+    balance = balance + transaction.signedAmount
 
     Line(
       StringBuilder.newBuilder
         .append(formatDateTimeToStr(transaction.timestamp))
         .append(SEPARATOR)
-        .append(transaction.amount)
+        .append(transaction.signedAmount)
         .append(SEPARATOR)
         .append(balance)
         .toString

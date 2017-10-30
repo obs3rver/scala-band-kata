@@ -5,16 +5,16 @@ import org.scalatest._
 import pl.artcoder.playground.kata.bank.account.Account
 import pl.artcoder.playground.kata.bank.money.Money
 import pl.artcoder.playground.kata.bank.printer.{Line, Printer, StatementPrinterImpl}
-import pl.artcoder.playground.kata.bank.transaction.{Transaction, TransactionRepository}
+import pl.artcoder.playground.kata.bank.transaction.TransactionRepositoryImpl
+import pl.artcoder.playground.kata.bank.util.Clock
 import pl.artcoder.playground.kata.bank.util.DateTimeCustomFormatter.parseDateTimeStr
-import pl.artcoder.playground.kata.bank.util.{Clock, Repository}
 
 class DisplayAccountSummaryAcceptanceSpec extends FlatSpec with MockFactory with Matchers {
   val consolePrinter = mock[Printer]
   val clock = stub[Clock]
 
   val statementPrinter = StatementPrinterImpl(consolePrinter)
-  val transactionRepository: Repository[Transaction] = TransactionRepository()
+  val transactionRepository = TransactionRepositoryImpl()
   val account = Account(statementPrinter, transactionRepository, clock)
 
   behavior of "Account"
@@ -37,6 +37,6 @@ class DisplayAccountSummaryAcceptanceSpec extends FlatSpec with MockFactory with
     account.deposit(Money(1000))
     account.deposit(Money(2000))
     account.withdraw(Money(500))
-    account.printStatement
+    account.printStatement()
   }
 }

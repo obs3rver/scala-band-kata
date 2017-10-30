@@ -4,6 +4,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 import pl.artcoder.playground.kata.bank.money.Money
 import pl.artcoder.playground.kata.bank.transaction.Transaction
+import pl.artcoder.playground.kata.bank.transaction.TransactionType.{Deposit, Withdrawal}
 import pl.artcoder.playground.kata.bank.util.DateTimeCustomFormatter.parseDateTimeStr
 
 class StatementPrinterSpec extends FlatSpec with MockFactory with Matchers {
@@ -23,11 +24,13 @@ class StatementPrinterSpec extends FlatSpec with MockFactory with Matchers {
   it should "print a header and transactions in order sorted by timestamp desc" in {
     //given
     val depositAmount = Money(500)
-    val withdrawalAmount = Money(-100)
+    val withdrawalAmount = Money(100)
     val depositDate = parseDateTimeStr("10/10/2017")
     val withdrawalDate = parseDateTimeStr("14/10/2017")
-    val deposit = Transaction(depositDate, depositAmount)
-    val withdrawal = Transaction(withdrawalDate, withdrawalAmount)
+    val depositType = Deposit
+    val withdrawalType = Withdrawal
+    val deposit = Transaction(depositDate, depositAmount, depositType)
+    val withdrawal = Transaction(withdrawalDate, withdrawalAmount, withdrawalType)
     val transactions = List(deposit, withdrawal)
 
     //expect
