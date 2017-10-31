@@ -1,14 +1,14 @@
-package pl.artcoder.playground.kata.bank.printer
+package pl.artcoder.playground.kata.bank.domain.printer
 
-import pl.artcoder.playground.kata.bank.money.Money
-import pl.artcoder.playground.kata.bank.transaction.Transaction
+import pl.artcoder.playground.kata.bank.domain.money.Money
+import pl.artcoder.playground.kata.bank.domain.transaction.Transaction
 import pl.artcoder.playground.kata.bank.util.DateTimeCustomFormatter.formatDateTimeToStr
 
 trait StatementPrinter {
   def printStatement(transactions: List[Transaction]): Unit
 }
 
-class StatementPrinterImpl(val printer: Printer) extends StatementPrinter {
+class TextTableStatementPrinter(val printer: Printer) extends StatementPrinter {
   private val STATEMENT_HEADER = "date || transaction || balance"
   private val SEPARATOR = " || "
   private var balance = zeroBalance
@@ -40,6 +40,6 @@ class StatementPrinterImpl(val printer: Printer) extends StatementPrinter {
   }
 }
 
-object StatementPrinterImpl {
-  def apply(printer: Printer): StatementPrinter = new StatementPrinterImpl(printer)
+object TextTableStatementPrinter {
+  def apply(printer: Printer): StatementPrinter = new TextTableStatementPrinter(printer)
 }

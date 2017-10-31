@@ -1,4 +1,4 @@
-package pl.artcoder.playground.kata.bank.printer
+package pl.artcoder.playground.kata.bank.domain.printer
 
 case class Line(value: String) extends AnyVal
 

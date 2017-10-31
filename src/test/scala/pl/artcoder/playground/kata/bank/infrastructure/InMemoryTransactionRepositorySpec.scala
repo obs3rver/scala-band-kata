@@ -1,14 +1,15 @@
-package pl.artcoder.playground.kata.bank.transaction
+package pl.artcoder.playground.kata.bank.infrastructure
 
 import java.time.LocalDate
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
-import pl.artcoder.playground.kata.bank.account.TimestampFilter.TransactionTimestampFilter
-import pl.artcoder.playground.kata.bank.account.TransactionTypeFilter.{DepositFilter, WithdrawalFilter}
-import pl.artcoder.playground.kata.bank.money.Money
+import pl.artcoder.playground.kata.bank.domain.account.TimestampFilter.TransactionTimestampFilter
+import pl.artcoder.playground.kata.bank.domain.account.TransactionTypeFilter.{DepositFilter, WithdrawalFilter}
+import pl.artcoder.playground.kata.bank.domain.money.Money
+import pl.artcoder.playground.kata.bank.domain.transaction.{Deposit, TransactionRepository, Withdrawal}
 
-class TransactionRepositorySpec extends FlatSpec with MockFactory with Matchers with BeforeAndAfter {
+class InMemoryTransactionRepositorySpec extends FlatSpec with MockFactory with Matchers with BeforeAndAfter {
   var repository: TransactionRepository = _
 
   val AMOUNT = Money(-100)
@@ -17,10 +18,10 @@ class TransactionRepositorySpec extends FlatSpec with MockFactory with Matchers 
   val withdrawal = Withdrawal(amount = AMOUNT)
 
   before {
-    repository = new TransactionRepositoryImpl
+    repository = new InMemoryTransactionRepository
   }
 
-  behavior of "TransactionRepository"
+  behavior of "InMemoryTransactionRepository"
 
   it should "save and find given transaction from repository" in {
     //when

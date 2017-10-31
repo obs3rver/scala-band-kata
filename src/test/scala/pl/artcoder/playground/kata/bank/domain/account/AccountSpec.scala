@@ -1,14 +1,14 @@
-package pl.artcoder.playground.kata.bank.account
+package pl.artcoder.playground.kata.bank.domain.account
 
 import java.time.LocalDate
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import pl.artcoder.playground.kata.bank.account.TimestampFilter.TransactionTimestampFilter
-import pl.artcoder.playground.kata.bank.account.TransactionTypeFilter.{AllTransactionsFilter, DepositFilter}
-import pl.artcoder.playground.kata.bank.money.Money
-import pl.artcoder.playground.kata.bank.printer.StatementPrinter
-import pl.artcoder.playground.kata.bank.transaction._
+import pl.artcoder.playground.kata.bank.domain.account.TimestampFilter.TransactionTimestampFilter
+import pl.artcoder.playground.kata.bank.domain.account.TransactionTypeFilter.{AllTransactionsFilter, DepositFilter}
+import pl.artcoder.playground.kata.bank.domain.money.Money
+import pl.artcoder.playground.kata.bank.domain.printer.StatementPrinter
+import pl.artcoder.playground.kata.bank.domain.transaction._
 import pl.artcoder.playground.kata.bank.util.CurrentClock
 
 class AccountSpec extends FlatSpec with MockFactory with Matchers {

@@ -1,12 +1,12 @@
-package pl.artcoder.playground.kata.bank.account
+package pl.artcoder.playground.kata.bank.domain.account
 
 import java.time.LocalDate
 
-import pl.artcoder.playground.kata.bank.account.TimestampFilter.{EmptyTimestampFilter, TransactionTimestampFilter}
-import pl.artcoder.playground.kata.bank.account.TransactionTypeFilter.AllTransactionsFilter
-import pl.artcoder.playground.kata.bank.money.Money
-import pl.artcoder.playground.kata.bank.printer.StatementPrinter
-import pl.artcoder.playground.kata.bank.transaction.{Deposit, Transaction, TransactionRepository, Withdrawal}
+import pl.artcoder.playground.kata.bank.domain.account.TimestampFilter.{EmptyTimestampFilter, TransactionTimestampFilter}
+import pl.artcoder.playground.kata.bank.domain.account.TransactionTypeFilter.AllTransactionsFilter
+import pl.artcoder.playground.kata.bank.domain.money.Money
+import pl.artcoder.playground.kata.bank.domain.printer.StatementPrinter
+import pl.artcoder.playground.kata.bank.domain.transaction.{Deposit, Transaction, TransactionRepository, Withdrawal}
 import pl.artcoder.playground.kata.bank.util.{Clock, CurrentClock}
 
 sealed trait TimestampFilter

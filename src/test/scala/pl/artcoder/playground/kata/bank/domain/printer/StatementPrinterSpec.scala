@@ -1,14 +1,14 @@
-package pl.artcoder.playground.kata.bank.printer
+package pl.artcoder.playground.kata.bank.domain.printer
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
-import pl.artcoder.playground.kata.bank.money.Money
-import pl.artcoder.playground.kata.bank.transaction.{Deposit, Transaction, Withdrawal}
+import pl.artcoder.playground.kata.bank.domain.money.Money
+import pl.artcoder.playground.kata.bank.domain.transaction.{Deposit, Transaction, Withdrawal}
 import pl.artcoder.playground.kata.bank.util.DateTimeCustomFormatter.parseDateTimeStr
 
 class StatementPrinterSpec extends FlatSpec with MockFactory with Matchers {
   val consolePrinter = mock[Printer]
-  val statementPrinter = StatementPrinterImpl(consolePrinter)
+  val statementPrinter = TextTableStatementPrinter(consolePrinter)
 
   behavior of "StatementPrinter"
 
