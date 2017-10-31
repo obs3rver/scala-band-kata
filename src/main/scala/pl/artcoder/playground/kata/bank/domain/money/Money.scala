@@ -1,4 +1,4 @@
-package pl.artcoder.playground.kata.bank.money
+package pl.artcoder.playground.kata.bank.domain.money
 
 import pl.artcoder.playground.kata.bank.util.MoneyFormating.formatMoneyToStr
 
