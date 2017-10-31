@@ -4,17 +4,17 @@ import java.time.LocalDate
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
-import pl.artcoder.playground.kata.bank.account.TransactionTimestampFilter
+import pl.artcoder.playground.kata.bank.account.TimestampFilter.TransactionTimestampFilter
+import pl.artcoder.playground.kata.bank.account.TransactionTypeFilter.{DepositFilter, WithdrawalFilter}
 import pl.artcoder.playground.kata.bank.money.Money
-import pl.artcoder.playground.kata.bank.transaction.TransactionType.{Deposit, Withdrawal}
 
 class TransactionRepositorySpec extends FlatSpec with MockFactory with Matchers with BeforeAndAfter {
   var repository: TransactionRepository = _
 
   val AMOUNT = Money(-100)
 
-  val deposit = Transaction(amount = AMOUNT, transactionType = Deposit)
-  val withdrawal = Transaction(amount = AMOUNT, transactionType = Withdrawal)
+  val deposit = Deposit(amount = AMOUNT)
+  val withdrawal = Withdrawal(amount = AMOUNT)
 
   before {
     repository = new TransactionRepositoryImpl
@@ -38,7 +38,7 @@ class TransactionRepositorySpec extends FlatSpec with MockFactory with Matchers 
     repository.save(withdrawal)
 
     //expect
-    val repoList = repository.findByTransactionType(Deposit)
+    val repoList = repository.findByTransactionType(DepositFilter)
     repoList should have size (1)
     repoList should be(List(deposit))
   }
@@ -48,15 +48,15 @@ class TransactionRepositorySpec extends FlatSpec with MockFactory with Matchers 
     val transactionTimestampFilter = TransactionTimestampFilter(LocalDate.of(2017, 10, 5))
     val depositTimestamp = LocalDate.of(2017, 10, 1)
     val withdrawalTimestamp = LocalDate.of(2017, 10, 10)
-    val deposit = Transaction(depositTimestamp, AMOUNT, Deposit)
-    val withdrawal = Transaction(withdrawalTimestamp, AMOUNT, Withdrawal)
+    val deposit = Deposit(depositTimestamp, AMOUNT)
+    val withdrawal = Withdrawal(withdrawalTimestamp, AMOUNT)
 
     //when
     repository.save(deposit)
     repository.save(withdrawal)
 
     //expect
-    val repoList = repository.findByTransactionTypeAndTimestampFilter(Withdrawal, transactionTimestampFilter)
+    val repoList = repository.findByTransactionTypeAndTimestampFilter(WithdrawalFilter, transactionTimestampFilter)
     repoList should have size (1)
     repoList should be(List(withdrawal))
   }

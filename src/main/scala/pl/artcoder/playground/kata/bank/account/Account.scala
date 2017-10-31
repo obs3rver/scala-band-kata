@@ -2,35 +2,70 @@ package pl.artcoder.playground.kata.bank.account
 
 import java.time.LocalDate
 
+import pl.artcoder.playground.kata.bank.account.TimestampFilter.{EmptyTimestampFilter, TransactionTimestampFilter}
+import pl.artcoder.playground.kata.bank.account.TransactionTypeFilter.AllTransactionsFilter
 import pl.artcoder.playground.kata.bank.money.Money
 import pl.artcoder.playground.kata.bank.printer.StatementPrinter
-import pl.artcoder.playground.kata.bank.transaction.TransactionType.{All, Deposit, Withdrawal}
-import pl.artcoder.playground.kata.bank.transaction.{Transaction, TransactionRepository, TransactionType}
+import pl.artcoder.playground.kata.bank.transaction.{Deposit, Transaction, TransactionRepository, Withdrawal}
 import pl.artcoder.playground.kata.bank.util.{Clock, CurrentClock}
 
 sealed trait TimestampFilter
 
-case class TransactionTimestampFilter(from: LocalDate, to: LocalDate = CurrentClock.now()) extends TimestampFilter
+object TimestampFilter {
 
-object EmptyTimestampFilter extends TimestampFilter
+  case class TransactionTimestampFilter(from: LocalDate, to: LocalDate = CurrentClock.now()) extends TimestampFilter
+
+  case object EmptyTimestampFilter extends TimestampFilter
+
+}
+
+sealed trait TransactionTypeFilter {
+  def test(transaction: Transaction): Boolean
+}
+
+object TransactionTypeFilter {
+
+  final object DepositFilter extends TransactionTypeFilter {
+    override def test(transaction: Transaction): Boolean = transaction match {
+      case Deposit(_, _) => true
+      case _ => false
+    }
+  }
+
+  final object WithdrawalFilter extends TransactionTypeFilter {
+    override def test(transaction: Transaction): Boolean = transaction match {
+      case Withdrawal(_, _) => true
+      case _ => false
+    }
+  }
+
+  final object AllTransactionsFilter extends TransactionTypeFilter {
+    override def test(transaction: Transaction): Boolean = transaction match {
+      case Deposit(_, _) => true
+      case Withdrawal(_, _) => true
+      case _ => false
+    }
+  }
+
+}
 
 class Account(statementPrinter: StatementPrinter,
               transactionRepository: TransactionRepository,
               clock: Clock) {
   def deposit(amount: Money): Unit =
-    transactionRepository.save(Transaction(clock.now(), amount, Deposit))
+    transactionRepository.save(Deposit(clock.now(), amount))
 
   def withdraw(amount: Money): Unit =
-    transactionRepository.save(Transaction(clock.now(), amount, Withdrawal))
+    transactionRepository.save(Withdrawal(clock.now(), amount))
 
   def printStatement(
-                      transactionTypeFilter: TransactionType = All,
+                      transactionTypeFilter: TransactionTypeFilter = AllTransactionsFilter,
                       transactionTimestampFilter: TimestampFilter = EmptyTimestampFilter
                     ): Unit = {
     val transactions = (transactionTypeFilter, transactionTimestampFilter) match {
-      case (All, EmptyTimestampFilter) => transactionRepository.findAll()
+      case (AllTransactionsFilter, EmptyTimestampFilter) => transactionRepository.findAll()
       case (_, EmptyTimestampFilter) => transactionRepository.findByTransactionType(transactionTypeFilter)
-      case (transactionType: TransactionType, transactionTimestamp: TransactionTimestampFilter) =>
+      case (transactionType: TransactionTypeFilter, transactionTimestamp: TransactionTimestampFilter) =>
         transactionRepository.findByTransactionTypeAndTimestampFilter(transactionType, transactionTimestamp)
     }
     statementPrinter.printStatement(transactions)

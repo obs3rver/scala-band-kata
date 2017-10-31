@@ -3,8 +3,7 @@ package pl.artcoder.playground.kata.bank.printer
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 import pl.artcoder.playground.kata.bank.money.Money
-import pl.artcoder.playground.kata.bank.transaction.Transaction
-import pl.artcoder.playground.kata.bank.transaction.TransactionType.{Deposit, Withdrawal}
+import pl.artcoder.playground.kata.bank.transaction.{Deposit, Transaction, Withdrawal}
 import pl.artcoder.playground.kata.bank.util.DateTimeCustomFormatter.parseDateTimeStr
 
 class StatementPrinterSpec extends FlatSpec with MockFactory with Matchers {
@@ -27,10 +26,8 @@ class StatementPrinterSpec extends FlatSpec with MockFactory with Matchers {
     val withdrawalAmount = Money(100)
     val depositDate = parseDateTimeStr("10/10/2017")
     val withdrawalDate = parseDateTimeStr("14/10/2017")
-    val depositType = Deposit
-    val withdrawalType = Withdrawal
-    val deposit = Transaction(depositDate, depositAmount, depositType)
-    val withdrawal = Transaction(withdrawalDate, withdrawalAmount, withdrawalType)
+    val deposit = Deposit(depositDate, depositAmount)
+    val withdrawal = Withdrawal(withdrawalDate, withdrawalAmount)
     val transactions = List(deposit, withdrawal)
 
     //expect
