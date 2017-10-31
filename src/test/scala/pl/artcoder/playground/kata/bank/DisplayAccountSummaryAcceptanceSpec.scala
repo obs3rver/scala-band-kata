@@ -2,10 +2,10 @@ package pl.artcoder.playground.kata.bank
 
 import org.scalamock.scalatest.MockFactory
 import org.scalatest._
-import pl.artcoder.playground.kata.bank.account.Account
-import pl.artcoder.playground.kata.bank.money.Money
-import pl.artcoder.playground.kata.bank.printer.{Line, Printer, StatementPrinterImpl}
-import pl.artcoder.playground.kata.bank.transaction.TransactionRepositoryImpl
+import pl.artcoder.playground.kata.bank.domain.account.Account
+import pl.artcoder.playground.kata.bank.domain.money.Money
+import pl.artcoder.playground.kata.bank.domain.printer.{Line, Printer, TextTableStatementPrinter}
+import pl.artcoder.playground.kata.bank.infrastructure.InMemoryTransactionRepository
 import pl.artcoder.playground.kata.bank.util.Clock
 import pl.artcoder.playground.kata.bank.util.DateTimeCustomFormatter.parseDateTimeStr
 
@@ -13,11 +13,9 @@ class DisplayAccountSummaryAcceptanceSpec extends FlatSpec with MockFactory with
   val consolePrinter = mock[Printer]
   val clock = stub[Clock]
 
-  val statementPrinter = StatementPrinterImpl(consolePrinter)
-  val transactionRepository = TransactionRepositoryImpl()
+  val statementPrinter = TextTableStatementPrinter(consolePrinter)
+  val transactionRepository = InMemoryTransactionRepository()
   val account = Account(statementPrinter, transactionRepository, clock)
-
-  behavior of "Account"
 
   it should "allow to display summary of transaction history" in {
     //given

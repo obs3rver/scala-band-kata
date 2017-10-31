@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-import pl.artcoder.playground.kata.bank.money.Money
+import pl.artcoder.playground.kata.bank.domain.money.Money
 
 object DateTimeCustomFormatter {
   private val DD_MM_YYYY = "dd/MM/yyyy"
